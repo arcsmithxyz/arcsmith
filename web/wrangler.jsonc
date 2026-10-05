@@ -1,0 +1,64 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "arcsmith-web",
+  // OpenNext's handler plus the X bot's cron handler (see worker.ts).
+  "main": "worker.ts",
+  "compatibility_date": "2026-09-16",
+  // arcsmith.xyz, registered at Cloudflare in this account. www redirects to it (worker.ts);
+  // the workers.dev address keeps working too.
+  "routes": [
+    { "pattern": "arcsmith.xyz", "custom_domain": true },
+    { "pattern": "www.arcsmith.xyz", "custom_domain": true }
+  ],
+  // Keep the old address alive for links already shared (routes switch it off by default).
+  "workers_dev": true,
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "arcsmith-web"
+    }
+  ],
+  // Per-IP limits: the /api/rpc relay (app/api/rpc/[network]/route.ts), token image uploads
+  // (app/api/media/route.ts) and the public hook check API (app/api/v1, lib/server/api.ts).
+  "ratelimits": [
+    {
+      "name": "RPC_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 60, "period": 10 }
+    },
+    {
+      "name": "MEDIA_RATE_LIMITER",
+      "namespace_id": "1002",
+      "simple": { "limit": 10, "period": 60 }
+    },
+    {
+      "name": "API_RATE_LIMITER",
+      "namespace_id": "1003",
+      "simple": { "limit": 60, "period": 60 }
+    }
+  ],
+  "kv_namespaces": [
+    // Token images uploaded in the builder, served from /media/<sha-256>.<ext> (lib/server/media.ts).
+    {
+      "binding": "MEDIA",
+      "id": "dc2d5dd57a6445f2956ff4853080f43b"
+    },
+    // Last good answers from the Arc index, served when it's down or over its daily limit
+    // (lib/server/cache.ts). Written at most hourly per key, to stay inside KV's write allowance.
+    {
+      "binding": "INDEX_CACHE",
+      "id": "66f0f19b972648e9aef1629476cc0bbe"
+    }
+  ],
+  // X bot: uncomment once the X_* secrets are set (docs/x-bot.md). Every 10 minutes, matching
+  // BOT_INTERVAL_SECONDS in worker.ts.
+  // "triggers": { "crons": ["*/10 * * * *"] },
+  "observability": {
+    "enabled": true
+  }
+}

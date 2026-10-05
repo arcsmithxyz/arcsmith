@@ -1,0 +1,8 @@
+allowBuilds:
+  esbuild: true
+  workerd: true
+  unrs-resolver: true
+
+# Flat, npm-style node_modules. OpenNext copies traced files and would otherwise
+# recreate pnpm's symlinks, which Windows refuses without Developer Mode.
+nodeLinker: hoisted

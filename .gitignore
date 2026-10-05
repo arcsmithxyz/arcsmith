@@ -1,0 +1,24 @@
+# Foundry build output
+contracts/out/
+contracts/cache/
+contracts/foundry-pp/
+contracts/broadcast/
+
+# Local Anvil chain (pnpm dev:local): redeployed on every start
+contracts/deployments/31337.json
+
+# Secrets: never commit keys
+.env
+.env.*
+!.env.example
+# Public build settings only (no secrets): production builds target Arc mainnet.
+!web/.env.production
+*.dev.vars
+
+# Web app
+web/node_modules/
+web/.next/
+web/.open-next/
+web/.wrangler/
+web/next-env.d.ts
+web/tsconfig.tsbuildinfo

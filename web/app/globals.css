@@ -1,0 +1,478 @@
+@import "tailwindcss";
+
+/*
+ * Arc × Trajectory system. Colours are Arc's published palette (arc.io); the look follows
+ * the Trajectory reference: an airy pastel sky, stippled illustrations, a friendly sans for
+ * headings with a serif for reading text, navy primary actions and soft sand secondaries.
+ */
+:root {
+  /* Arc palette, under Arc's own names. */
+  --arc-protocol-navy: #1b3158;
+  --arc-validator-blue: #2f578c;
+  --arc-cipher-violet: #412c5c;
+  --arc-quantum-plum: #664c88;
+  --arc-sky-sync: #acc6e9;
+  --arc-static-ether: #d5e0e7;
+  --arc-hash-cloud: #ddd6dd;
+  --arc-consensus-mauve: #908290;
+  --arc-blockstream-gold: #e9a13f;
+  --arc-token-sand: #ffcc6f;
+  --arc-miner-clay: #c0827a;
+  --arc-burnt-block: #702718;
+
+  /* Roles. Neutrals are Arc's warm off-white shaded toward Hash Cloud. */
+  --bg: #fbf5f0;
+  --surface: #f2ecea;
+  --surface-hover: #eae3e3;
+  --panel: #fffcf9;
+  --border: #e5dedf;
+  --border-strong: #d4cbcf;
+  --text: #16253f;
+  --text-muted: #56606d;
+  --text-subtle: #7c838a;
+
+  /* Primary actions: navy. Secondary: Token Sand with Burnt Block text. */
+  --ink: var(--arc-protocol-navy);
+  --ink-hover: #24406f;
+  --on-ink: #fbf5f0;
+  --soft: #fbd99a;
+  --soft-hover: #f8cd7c;
+  --on-soft: var(--arc-burnt-block);
+
+  --accent: var(--arc-blockstream-gold);
+  --on-accent: var(--arc-protocol-navy);
+
+  /* Trading semantics, tuned to sit with the palette. */
+  --buy: #2b7a5c;
+  --buy-soft: #e1eee8;
+  --sell: #9c3b26;
+  --sell-soft: #f5e4df;
+  --warn: #9a5d0e;
+  --warn-soft: #fbedd5;
+
+  --card-radius: 24px;
+  --panel-radius: 16px;
+  --control-radius: 14px;
+  --panel-shadow: 0 1px 2px rgb(22 37 63 / 0.04), 0 8px 24px rgb(22 37 63 / 0.06);
+
+  /* Room the fixed header takes at the top of every page. */
+  --header-space: 5.5rem;
+}
+
+/* Motion curves; also generates the ease-spring / ease-button utilities. */
+@theme {
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-button: cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-panel: var(--panel);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-ink: var(--ink);
+  --color-ink-hover: var(--ink-hover);
+  --color-on-ink: var(--on-ink);
+  --color-soft: var(--soft);
+  --color-on-soft: var(--on-soft);
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-subtle: var(--text-subtle);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-validator: var(--arc-validator-blue);
+  --color-sky: var(--arc-sky-sync);
+  --color-ether: var(--arc-static-ether);
+  --color-cloud: var(--arc-hash-cloud);
+  --color-plum: var(--arc-quantum-plum);
+  --color-sand: var(--arc-token-sand);
+  --color-clay: var(--arc-miner-clay);
+  --color-buy: var(--buy);
+  --color-buy-soft: var(--buy-soft);
+  --color-sell: var(--sell);
+  --color-sell-soft: var(--sell-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+
+  --radius-card: var(--card-radius);
+  --radius-panel: var(--panel-radius);
+  --radius-control: var(--control-radius);
+  --shadow-panel: var(--panel-shadow);
+
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--arc-sky-sync);
+  color: var(--arc-protocol-navy);
+}
+
+/* Headings: medium weight, gently tightened. */
+.headline {
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.eyebrow {
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+}
+
+/* Outlined serif label, the reference's section tag. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+ * Buttons: soft rectangles in the serif, a gentle lift and glow on hover.
+ * ------------------------------------------------------------------------- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.75rem;
+  padding: 0 1.25rem;
+  border-radius: var(--control-radius);
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1rem;
+  white-space: nowrap;
+  transition:
+    background-color 400ms var(--ease-spring),
+    border-color 400ms var(--ease-spring),
+    color 400ms var(--ease-spring),
+    box-shadow 500ms var(--ease-spring),
+    translate 400ms var(--ease-spring),
+    scale 200ms var(--ease-spring),
+    opacity 150ms;
+}
+.pill:hover:not(:disabled) {
+  translate: 0 -1px;
+}
+.pill:active:not(:disabled) {
+  scale: 0.98;
+  translate: 0 0;
+}
+.pill:focus-visible {
+  outline: 2px solid var(--arc-validator-blue);
+  outline-offset: 2px;
+}
+.pill:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.pill-ink {
+  background: var(--ink);
+  color: var(--on-ink);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12);
+}
+.pill-ink:hover:not(:disabled) {
+  background: var(--ink-hover);
+  /* Soft halo, like the reference's glowing primary button. */
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    0 0 0 4px rgb(172 198 233 / 0.45),
+    0 10px 28px rgb(27 49 88 / 0.25);
+}
+.pill-accent,
+.pill-soft {
+  background: var(--soft);
+  color: var(--on-soft);
+}
+.pill-accent:hover:not(:disabled),
+.pill-soft:hover:not(:disabled) {
+  background: var(--soft-hover);
+  box-shadow: 0 0 0 4px rgb(255 204 111 / 0.35);
+}
+.pill-ghost {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+}
+.pill-ghost:hover:not(:disabled) {
+  background: var(--surface);
+  border-color: var(--text-subtle);
+}
+/* Quiet secondary that works on light and dark: the text colour, with a hairline border in it. */
+.pill-outline {
+  background: transparent;
+  color: inherit;
+  border: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+}
+.pill-outline:hover:not(:disabled) {
+  background: color-mix(in srgb, currentColor 7%, transparent);
+  border-color: color-mix(in srgb, currentColor 55%, transparent);
+}
+/* The primary action over dark bands: cream with navy text. */
+.pill-light {
+  background: var(--on-ink);
+  color: var(--ink);
+}
+.pill-light:hover:not(:disabled) {
+  background: #fff;
+  box-shadow:
+    0 0 0 4px rgb(172 198 233 / 0.35),
+    0 10px 28px rgb(0 0 0 / 0.2);
+}
+.pill-sm {
+  height: 2.25rem;
+  padding: 0 0.875rem;
+  font-size: 0.875rem;
+  --control-radius: 10px;
+}
+.pill-lg {
+  height: 3.25rem;
+  padding: 0 1.75rem;
+  font-size: 1.0625rem;
+}
+
+/* Segmented tabs. */
+.tabs {
+  display: inline-flex;
+  padding: 4px;
+  gap: 2px;
+  border-radius: var(--control-radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.tab {
+  height: 2.25rem;
+  padding: 0 1rem;
+  border-radius: calc(var(--control-radius) - 4px);
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+  transition:
+    background-color 300ms var(--ease-spring),
+    color 300ms var(--ease-spring),
+    box-shadow 300ms var(--ease-spring);
+}
+.tab:hover {
+  color: var(--text);
+}
+.tab:focus-visible {
+  outline: 2px solid var(--arc-validator-blue);
+  outline-offset: 1px;
+}
+.tab[aria-selected="true"] {
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: var(--panel-shadow);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+}
+a.card,
+button.card {
+  transition:
+    background-color 400ms var(--ease-spring),
+    translate 400ms var(--ease-spring),
+    border-color 400ms var(--ease-spring);
+}
+a.card:hover {
+  translate: 0 -2px;
+  border-color: var(--border-strong);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+}
+
+.field {
+  width: 100%;
+  height: 2.75rem;
+  padding: 0 0.875rem;
+  border-radius: 12px;
+  background: var(--panel);
+  border: 1px solid var(--border-strong);
+  font-size: 0.9375rem;
+  color: var(--text);
+  outline: none;
+  transition:
+    border-color 300ms var(--ease-spring),
+    box-shadow 300ms var(--ease-spring);
+}
+textarea.field {
+  height: auto;
+  padding: 0.75rem 0.875rem;
+  resize: vertical;
+}
+.field:hover {
+  border-color: var(--text-subtle);
+}
+.field:focus {
+  border-color: var(--arc-validator-blue);
+  box-shadow: 0 0 0 3px rgb(47 87 140 / 0.15);
+}
+.field::placeholder {
+  color: var(--text-subtle);
+}
+
+/* ---------------------------------------------------------------------------
+ * Arc surfaces.
+ * ------------------------------------------------------------------------- */
+
+/* Navy card (kept under its old name: several panels use it). */
+.organic {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(165deg, #163756 0%, #153655 40%, #416d91 82%, #75a8ae 100%);
+}
+
+/*
+ * Dawn sky for the hero and the closing section: Sky Sync and Hash Cloud at the top,
+ * warming through clay and sand toward the canvas colour.
+ */
+.sky-dawn {
+  background:
+    radial-gradient(55% 45% at 88% 38%, rgb(233 161 63 / 0.32), transparent 70%),
+    radial-gradient(45% 40% at 8% 62%, rgb(192 130 122 / 0.22), transparent 70%),
+    linear-gradient(180deg, #c3d3ef 0%, #d9d5e8 28%, #efd8cb 58%, #fbecd2 82%, #fbf5f0 100%);
+}
+
+/* Film grain over the sky, so the flat gradient matches the stippled art. */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.22;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------------------------------------------------------------------------
+ * Motion.
+ * ------------------------------------------------------------------------- */
+
+/* Scroll reveal: content rises out of a blur as it enters the viewport (see Reveal.tsx).
+ * Only hidden when scripts run, so nothing stays invisible without JavaScript. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal]:not([data-visible]) {
+    opacity: 0;
+    translate: 0 3rem;
+    filter: blur(10px);
+  }
+  [data-reveal] {
+    transition:
+      opacity 1000ms var(--ease-spring),
+      translate 1000ms var(--ease-spring),
+      filter 1000ms var(--ease-spring);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+}
+
+/* First paint of the home hero. */
+.enter {
+  animation: enter 1200ms var(--ease-spring) both;
+  animation-delay: var(--enter-delay, 0ms);
+}
+/* A new row in a live feed: drops in with a brief sky-blue glow. */
+.feed-in {
+  animation: feed-in 1100ms var(--ease-spring) both;
+}
+@keyframes feed-in {
+  from {
+    opacity: 0;
+    translate: 0 -0.5rem;
+    background-color: rgb(172 198 233 / 0.5);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    background-color: transparent;
+  }
+}
+@keyframes enter {
+  from {
+    opacity: 0;
+    translate: 0 2rem;
+    filter: blur(8px);
+  }
+}
+
+/* The hero object bobbing in the air. */
+@keyframes float {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: -2deg;
+  }
+  50% {
+    translate: 0 -14px;
+    rotate: 1.5deg;
+  }
+}
+
+/* Endless horizontal strip (the list is rendered twice; move by half). */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Builder showcase tabs: the active tab's line fills while it dwells. */
+@keyframes dwell {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
