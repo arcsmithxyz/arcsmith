@@ -8,7 +8,7 @@ const DOORS = [
   { who: "Existing tokens", body: "Open a hooked market for any token on Arc, with your own rules.", href: "/docs/existing-tokens", cta: "How it works" },
   { who: "Liquidity providers", body: "Add full-range liquidity to any Arcsmith pool and earn a share of every trade.", href: "/discover", cta: "Browse pools" },
   { who: "Block authors", body: "Write a block, get it reviewed, and earn a royalty from every launch that uses it.", href: "/docs/write-a-block", cta: "Write a block" },
-  { who: "Apps and bots", body: "Ask what any hook on Arc can do and get the answer as JSON. Free, no key.", href: "/docs/api", cta: "Hook check API" },
+  { who: "Apps, bots and AI", body: "Get any hook's abilities as JSON, or let Claude and Cursor check hooks on Arc through our MCP server. Free, no key.", href: "/docs/mcp", cta: "Connect your AI" },
 ];
 
 export function BuiltFor() {

@@ -18,6 +18,7 @@ export const DOC_GROUPS: { title: string; pages: DocPage[] }[] = [
       { slug: "trading-and-liquidity", title: "Trading and liquidity", description: "Fees, slippage, the launch floor and full-range positions." },
       { slug: "hook-reader", title: "Reading any hook", description: "What the hook reader shows and how to read it." },
       { slug: "api", title: "Hook check API", description: "Ask what any Uniswap v4 hook on Arc can do, from your own app. Free, no key." },
+      { slug: "mcp", title: "AI assistants (MCP)", description: "Let Claude, Cursor or any MCP client check hooks on Arc while it answers you." },
     ],
   },
   {

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ActivityFeed } from "@/components/ActivityFeed";
 import { BuilderShowcase } from "@/components/home/BuilderShowcase";
 import { BuiltFor } from "@/components/home/BuiltFor";
+import { SayIt } from "@/components/home/SayIt";
 import { DotField } from "@/components/home/DotField";
 import { Faq } from "@/components/home/Faq";
 import { HeroSky } from "@/components/home/HeroSky";
@@ -59,6 +60,8 @@ export default function HomePage() {
           <ActivityFeed limit={8} />
         </Reveal>
       </section>
+
+      <SayIt />
 
       <BuiltFor />
 

@@ -1,0 +1,22 @@
+# Arcsmith
+
+> Arcsmith builds Uniswap v4 hooks from reviewed blocks on Arc (Circle's USDC-gas L1), and reads what any Uniswap v4 hook on Arc mainnet can do before you trade through it. Answers are capabilities, not verdicts: what a hook's address allows, not what it does or whether it is safe.
+
+## For AI agents
+- [MCP server](https://arcsmith.xyz/mcp): remote MCP (Streamable HTTP, stateless, read-only, no key). Tools: check_hook, check_token, trade_cost, pre_trade_check, top_hooks.
+- [Hook check API](https://arcsmith.xyz/docs/api): the same answers as JSON over HTTP, free, no key, 60 requests a minute per IP.
+  - GET https://arcsmith.xyz/api/v1/hooks/{address}
+  - GET https://arcsmith.xyz/api/v1/tokens/{address}?cost=true
+  - GET https://arcsmith.xyz/api/v1/pools/{poolId}/cost
+  - GET https://arcsmith.xyz/api/v1/rankings
+
+## Docs
+- [Introduction](https://arcsmith.xyz/docs): what Arcsmith is and who it is for
+- [How it works](https://arcsmith.xyz/docs/how-it-works): one kernel hook, small blocks, rules frozen per pool
+- [Reading any hook](https://arcsmith.xyz/docs/hook-reader): the seven questions the Hook Reader answers
+- [Safety guarantees](https://arcsmith.xyz/docs/safety): what the kernel enforces whatever the blocks do
+- [Contract addresses](https://arcsmith.xyz/docs/contracts): every contract on Arc mainnet, verified on Arc Explorer
+- [Risks](https://arcsmith.xyz/docs/risks): unaudited software; what can go wrong
+
+## Source
+- [GitHub](https://github.com/arcsmithxyz/arcsmith): contracts, verification inputs and the web app (MIT)

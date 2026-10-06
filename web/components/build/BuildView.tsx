@@ -14,12 +14,13 @@ import {
   type Hex,
 } from "viem";
 import { launchpadAbi } from "@/lib/abi/Launchpad";
-import { encodeConfig, fromInput, validateValues, type CatalogBlock } from "@/lib/blocks";
+import { blockKind, encodeConfig, fromInput, validateValues, type CatalogBlock } from "@/lib/blocks";
 import { deployment, isUsdc } from "@/lib/config";
 import { friendlyError } from "@/lib/errors";
 import { formatBps, formatFee, formatQuoted } from "@/lib/format";
 import { sqrtPriceFor } from "@/lib/market";
 import { isAddress } from "@/lib/permissions";
+import { presetById, type Preset } from "@/lib/presets";
 import { useCatalog } from "@/lib/hooks/useCatalog";
 import { useDebounced } from "@/lib/hooks/useDebounced";
 import { useFeePreview, type StackItem } from "@/lib/hooks/useFeePreview";
@@ -29,7 +30,7 @@ import { BlockIcon, LockIcon } from "../BlockIcon";
 import { FeeCurveChart } from "../FeeCurveChart";
 import { EmptyState } from "../ui";
 import { WalletGate } from "../WalletGate";
-import { MAX_BLOCKS, StackEditor, type StackEntry } from "./StackEditor";
+import { MAX_BLOCKS, newEntry, StackEditor, type StackEntry } from "./StackEditor";
 import { TokenImageField, type TokenImage } from "./TokenImageField";
 
 type Lane = "launch" | "existing";
@@ -66,6 +67,27 @@ export function BuildView() {
 
   const isLaunch = lane === "launch";
   const available = catalog.blocks.filter((b) => b.status === "approved" && b.metadata);
+
+  // A starting point from /build?preset=<id> (the home page's "say it" examples), applied once, as soon as the
+  // catalog has loaded. The catalog loads in the browser, so this never runs during the server render.
+  const [preset, setPreset] = useState<Preset | null>(null);
+  const [presetApplied, setPresetApplied] = useState(false);
+  if (!presetApplied && !catalog.isLoading && typeof window !== "undefined") {
+    setPresetApplied(true);
+    const chosen = presetById(new URLSearchParams(window.location.search).get("preset"));
+    if (chosen) {
+      const entries = chosen.blocks.flatMap(({ kind, settings = {} }) => {
+        const block = available.find((b) => blockKind(b.address) === kind);
+        if (!block?.metadata) return [];
+        const entry = newEntry(block);
+        const inputs = block.metadata.config.map((field, i) => (field.key in settings ? String(settings[field.key]) : entry.inputs[i]));
+        return [{ ...entry, inputs }];
+      });
+      setBaseFeeInput(chosen.baseFee);
+      setStack(entries.slice(0, MAX_BLOCKS));
+      setPreset(chosen);
+    }
+  }
 
   // --- Rules -------------------------------------------------------------------
   const baseFee = Math.round(Number(baseFeeInput) * 10_000);
@@ -268,6 +290,12 @@ export function BuildView() {
               {baseFeeError ?? "Every trade pays this; it goes to liquidity. 0.01% – 3%."}
             </p>
           </div>
+          {preset && (
+            <p className="panel mb-4 p-4 text-sm leading-relaxed text-muted">
+              <span className="font-medium text-ink">Started from &ldquo;{preset.says}&rdquo;</span> ({preset.title}). Every setting
+              below is yours to change; nothing is final until you launch.
+            </p>
+          )}
           <StackEditor
             stack={stack}
             errors={stackErrors}

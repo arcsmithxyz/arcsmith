@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import { HookCheckApi } from "./api";
+import { McpDoc } from "./mcp";
 import { NativeBlocks, WriteABlock } from "./blocks";
 import { HowItWorks, Introduction, QuickStart } from "./getting-started";
 import { ExistingTokens, HookReaderDoc, LaunchToken, TradingAndLiquidity } from "./guides";
@@ -16,6 +17,7 @@ export const DOC_CONTENT: Record<string, ComponentType> = {
   "trading-and-liquidity": TradingAndLiquidity,
   "hook-reader": HookReaderDoc,
   api: HookCheckApi,
+  mcp: McpDoc,
   blocks: NativeBlocks,
   "write-a-block": WriteABlock,
   safety: Safety,

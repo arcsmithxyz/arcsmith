@@ -151,6 +151,34 @@ export function HookCheckApi() {
         they run. The reader pages have a <strong>Share on X</strong> button.
       </P>
 
+      <H2 id="mcp">From your AI assistant (MCP)</H2>
+      <P>
+        The same checks are a remote MCP server, so assistants like Claude and Cursor can call them while they answer you: ask
+        &quot;what can the hook on this pool do?&quot; and it reads the answer from Arcsmith. No key, no install, read-only.
+      </P>
+      <CodeBlock label="MCP server URL (Streamable HTTP)" code={`${SITE_URL}/mcp`} />
+      <P>
+        Full setup and examples: <A href="/docs/mcp">AI assistants (MCP)</A>.
+      </P>
+      <UL>
+        <li>
+          <strong>Claude:</strong> Settings → Connectors → Add custom connector, and paste the URL. In Claude Code:{" "}
+          <C>claude mcp add --transport http arcsmith {SITE_URL}/mcp</C>
+        </li>
+        <li>
+          <strong>Cursor:</strong> add it to <C>.cursor/mcp.json</C> under <C>mcpServers</C> as <C>{`{ "arcsmith": { "url": "${SITE_URL}/mcp" } }`}</C>
+        </li>
+      </UL>
+      <Table
+        head={["Tool", "What it answers"]}
+        rows={[
+          [<C key="h">check_hook</C>, "What a hook can do with a trade, its 14 flags, and whether its source is published"],
+          [<C key="t">check_token</C>, "A token's pools on Arc, each pool's hook, lookalike warnings; cost=true adds a small simulated buy and sell"],
+          [<C key="c">trade_cost</C>, "What a ~$5 buy and sell cost in one pool, hook included"],
+          [<C key="r">top_hooks</C>, "The busiest hooks on Arc, without wash-traded ones"],
+        ]}
+      />
+
       <H2 id="errors">Errors and limits</H2>
       <P>
         Every error has one shape, <C>{`{ "error": { "code": "...", "message": "..." } }`}</C>.
